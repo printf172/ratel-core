@@ -41,7 +41,7 @@ public class RatelToolKit {
     public static String processName = null;
 
     /**
-     * 当成packageName
+     * 当前packageName
      */
     public static String packageName = null;
 
@@ -136,7 +136,7 @@ public class RatelToolKit {
      */
     public static String whiteSdcardDirPath = null;
     /**
-     * @hidden
+     * @hiddenD
      */
     public static Set<RatalStartUpCallback> ratalStartUpCallbackSet = new CopyOnWriteArraySet<>();
 

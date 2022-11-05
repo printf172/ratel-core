@@ -138,10 +138,11 @@ public class PageTriggerManager {
         Activity topActivity = PageTriggerManager.getTopActivity();
         if (topActivity != null) {
             View rootView = topActivity.getWindow().getDecorView();
-            if (rootView.getVisibility() == View.VISIBLE) {
+            //判断app是否在前台
+//            if (rootView.getVisibility() == View.VISIBLE) { //不知道为什么后台无法截图，暂时注释掉
                 return rootView;
-            }
-            Log.w(SuperAppium.TAG, "target activity : " + topActivity + " not visible!!");
+//            }
+//            Log.w(SuperAppium.TAG, "target activity : " + topActivity + " not visible!!");
         }
 
         Window dialogWindow = PageTriggerManager.getTopDialogWindow();

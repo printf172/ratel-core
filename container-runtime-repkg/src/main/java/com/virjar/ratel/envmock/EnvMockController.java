@@ -34,6 +34,7 @@ public class EnvMockController {
         return virtualEnvModel;
     }
 
+    //初始化虚拟环境模块
     public static void initEnvModel() {
         String virualEnvModelStr = RatelConfig.getConfig(Constants.virtualEnvModel);
         if (TextUtils.isEmpty(virualEnvModelStr) || virualEnvModelStr.equalsIgnoreCase(VirtualEnv.VirtualEnvModel.DISABLE.name())) {
@@ -51,10 +52,11 @@ public class EnvMockController {
         if (virtualEnvModel == VirtualEnv.VirtualEnvModel.MULTI) {
             String multiUserId = RatelConfig.getConfig(Constants.multiUserIdKey);
             MultiUserManager.cleanRemovedUser();
-            MultiUserManager.setMockUserId(multiUserId);
+            MultiUserManager.setMockUserId(multiUserId);//设置虚拟用户ID
         }
     }
 
+    //切换虚拟环境
     public static void switchEnvIfNeed(Context context) throws Exception {
         if (virtualEnvModel == VirtualEnv.VirtualEnvModel.DISABLE && !RatelRuntime.isZeldaEngine()) {
             return;
@@ -96,10 +98,12 @@ public class EnvMockController {
         }
     }
 
+    //处理多用户环境
     @SuppressLint("SdCardPath")
     private static void handleMultiUserEnv(Context context) throws IOException {
         //now add all file redirect
 
+        //获取重定向白名单
         List<File> files = RatelEnvironment.ratelWhiteFiles();
         Set<String> whiteDir = new HashSet<>();
         for (File file : files) {
@@ -112,6 +116,7 @@ public class EnvMockController {
         for (String str : whiteDir) {
             RatelNative.whitelist(dataDataPath + str);
         }
+        //获取原始的环境目录
         RatelNative.redirectDirectory(dataDataPath, RatelEnvironment.envMockData().getCanonicalPath());
 
         //handle /data/user/0
@@ -119,7 +124,7 @@ public class EnvMockController {
         for (String str : whiteDir) {
             RatelNative.whitelist(dataUser0Path + str);
         }
-
+        //获取虚拟用户的环境目录
         RatelNative.redirectDirectory(dataUser0Path, RatelEnvironment.envMockData().getCanonicalPath());
 
 
@@ -142,6 +147,7 @@ public class EnvMockController {
         //TODO /sys/class/net/wlan0/address
         //TODO /sys/class/net/eth0/address
         //TODO /sys/class/net/wifi/address
+        //确保环境模拟子目录
         RatelEnvironment.ensureEnvMockSubDirs();
 
         for (String envMockBackDir : dataDataPath(RatelEnvironment.envMockBaseDir().getCanonicalPath())) {
@@ -158,7 +164,7 @@ public class EnvMockController {
 
         // RatelNative.whitelist("/data/user/0/com.csair.mbp/.vCache/");
         if (RatelRuntime.nowPackageName.equals("com.csair.mbp")) {
-            //TODO 这是南航加壳的目录，这个目录重定向会导致南航无限重启，VA一样的表现，具体愿意不明
+            //TODO 这是南航加壳的目录，这个目录重定向会导致南航无限重启，VA一样的表现，具体原因不明
             for (String czCacheDir : dataDataPath("/data/user/0/com.csair.mbp/.vCache/")) {
                 RatelNative.whitelist(czCacheDir);
             }
@@ -269,6 +275,7 @@ public class EnvMockController {
     }
 
 
+    //伪造设备
     private static void fakeDevice2(final Context context) throws Exception {
         // 1
         SystemPropertiesFake.fakeSystemProperties();

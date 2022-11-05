@@ -44,12 +44,16 @@ int user_seed = -1;
 bool open_mac_address_fake = false;
 
 void startIOHook(int api_level, bool needHookProperties);
-
+//获取进程名
 char *get_process_name() {
     char *cmdline = (char *) calloc(0x400u, 1u);
     if (cmdline) {
-        FILE *file = fopen("/proc/self/cmdline", "r");
+        FILE *file = fopen("/proc/self/cmdline", "r");//打开一些设备配置文件
         if (file) {
+            //1 buffer  -   指向要读取的数组中首个对象的指针
+            //2 size    -   每个对象的字节大小
+            //3 count   -   要读取的对象数
+            //4 stream  -   读取来源的输入文件流
             int count = fread(cmdline, 1u, 0x400u, file);
             if (count) {
                 if (cmdline[count - 1] == '\n') {
@@ -63,7 +67,7 @@ char *get_process_name() {
     }
     return cmdline;
 }
-
+//环境初始化
 void IOUniformer::init_env_before_all() {
     if (!need_load_env) {
         return;
@@ -77,7 +81,7 @@ void IOUniformer::init_env_before_all() {
     execve_process = true;
     char *process_name = get_process_name();
     ALOGI("Start init env : %s", process_name);
-    free(process_name);
+    free(process_name);//标记process的内存可以被覆盖
     char src_key[KEY_MAX];
     char dst_key[KEY_MAX];
     int i = 0;
@@ -96,6 +100,9 @@ void IOUniformer::init_env_before_all() {
     }
     i = 0;
     while (true) {
+        //1：为指针或是数组
+        //2：是赋给buffer的值
+        //3：赋值buffer中的位数
         memset(src_key, 0, sizeof(src_key));
         sprintf(src_key, "V_KEEP_ITEM_%d", i);
         char *keep_value = getenv(src_key);
@@ -116,6 +123,7 @@ void IOUniformer::init_env_before_all() {
         add_forbidden_item(forbid_value);
         i++;
     }
+    //判断是否启用zelda引擎
     char *zelda_flag = getenv("ZE_ORIGIN_PKG");
     if (zelda_flag != nullptr) {
         zelda_origin_package_name = strdup(getenv("ZE_ORIGIN_PKG"));
@@ -150,7 +158,7 @@ void IOUniformer::init_env_before_all() {
 
 static inline void
 hook_function(void *handle, const char *symbol, void *new_func, void **old_func) {
-    void *addr = dlsym(handle, symbol);
+    void *addr = dlsym(handle, symbol);//根据动态链接库操作句柄与符号，返回符号对应的地址
     if (addr == nullptr) {
         ALOGE("Not found symbol : %s", symbol);
         return;
@@ -209,7 +217,10 @@ __BEGIN_DECLS
 HOOK_DEF(int, faccessat, int dirfd, const char *pathname, int mode, int flags) {
     char temp[PATH_MAX];
     const char *relocated_path = relocate_path(pathname, temp, sizeof(temp));
+    //如果新地址不是只读的,
+    //W_OK:  判断对文件是否有写权限
     if (relocated_path && !(mode & W_OK && isReadOnly(relocated_path))) {
+        //通过系统调用进行访问权限测试
         return syscall(__NR_faccessat, dirfd, relocated_path, mode, flags);
     }
     errno = EACCES;
@@ -274,6 +285,7 @@ HOOK_DEF(int, __statfs64, const char *pathname, size_t size, struct statfs *stat
     char temp[PATH_MAX];
     const char *relocated_path = relocate_path(pathname, temp, sizeof(temp));
     if (__predict_true(relocated_path)) {
+        //获取硬盘分区使用情况
         int ret = syscall(__NR_statfs64, relocated_path, size, stat);
         //DODO
         return ret;
@@ -791,7 +803,7 @@ static char **relocate_envp(const char *pathname, char *const envp[]) {
     /* append NULL element */
     ++len;
 
-    char **relocated_envp = (char **) malloc(len * sizeof(char *));
+    char **relocated_envp = (char **) malloc(len * sizeof(char *));//分配长度为num_bytes字节的内存块
     memset(relocated_envp, 0, len * sizeof(char *));
     for (int i = 0; envp[i]; ++i) {
         if (i != ld_preload_index) {
@@ -906,7 +918,7 @@ HOOK_DEF(pid_t, vfork) {
 __END_DECLS
 // end IO DEF
 
-
+//寻扎do_dlopen符号
 bool relocate_linker(const char *linker_path) {
     intptr_t linker_addr, dlopen_off, symbol;
     if ((linker_addr = get_addr(linker_path)) == 0) {
@@ -989,27 +1001,33 @@ bool relocate_linker(const char *linker_path) {
 }
 
 #if defined(__aarch64__)
-
+/**
+ * 扫描指令后的hook逻辑
+ * @param path
+ * @param num
+ * @param func
+ * @return
+ */
 bool on_found_syscall_aarch64(const char *path, int num, void *func) {
     static int pass = 0;
     switch (num) {
-        HOOK_SYSCALL(fchmodat)
-        HOOK_SYSCALL(fchownat)
-        HOOK_SYSCALL(renameat)
-        HOOK_SYSCALL(mkdirat)
-        HOOK_SYSCALL(mknodat)
-        HOOK_SYSCALL(truncate)
-        HOOK_SYSCALL(linkat)
-        HOOK_SYSCALL(faccessat)
-        HOOK_SYSCALL_(statfs)
+        HOOK_SYSCALL(fchmodat)  //更改现有文件的访问权限,进程的有效用户ID必须等于文件的所有者ID，或者进程必须具有超级用户权限。
+        HOOK_SYSCALL(fchownat)  //改变文件的一个相对的所有权到一个目录文件描述符
+        HOOK_SYSCALL(renameat)  //重命名
+        HOOK_SYSCALL(mkdirat)   //创建目录
+        HOOK_SYSCALL(mknodat)   //创建一个特殊或普通的文件。
+        HOOK_SYSCALL(truncate)  //将参数path指定的文件大小改为参数length指定的大小
+        HOOK_SYSCALL(linkat)    //创建一个指向现有文件的链接
+        HOOK_SYSCALL(faccessat) //测试访问权限
+        HOOK_SYSCALL_(statfs)   //获取挂载点的文件系统信息
         HOOK_SYSCALL_(getcwd)
         HOOK_SYSCALL_(openat)
-        HOOK_SYSCALL(readlinkat)
-        HOOK_SYSCALL(unlinkat)
-        HOOK_SYSCALL(symlinkat)
-        HOOK_SYSCALL(utimensat)
-        HOOK_SYSCALL(chdir)
-        HOOK_SYSCALL(execve)
+        HOOK_SYSCALL(readlinkat) //若成功，返回读取的字节数；若出错，返回-1
+        HOOK_SYSCALL(unlinkat)  //卸载软链接
+        HOOK_SYSCALL(symlinkat) //创建一个符号链接，1：符号链接要指向的文件或者目录（可能尚不存在）， 2：符号链接的名字
+        HOOK_SYSCALL(utimensat) //通过文件的路径（pathname）获得文件
+        HOOK_SYSCALL(chdir)     //其参数为Path 目标目录，可以是绝对目录或相对目录。
+        HOOK_SYSCALL(execve)    //在父进程中fork一个子进程，在子进程中调用exec函数启动新的程序,用来执行参数filename字符串所代表的文件路径，第二个参数是利用指针数组来传递给执行文件，并且需要以空指针(NULL)结束，最后一个参数则为传递给执行文件的新环境变量数组。
         HOOK_SYSCALL(kill)
     }
     if (pass == 18) {
@@ -1066,6 +1084,7 @@ int (*old__system_property_get)(const char *__name, char *__value);
 
 //我们之前从native反射到java，有很大问题。华为有一个机型直接卡白屏。目前原因未知，我们将属性替换重心逻辑由java层迁移到native层
 //这样会损失一些灵活性，因为不能回调java的handler了。所有替换项需要提前设置
+//同等android.os.SystemProperties.get("xxxx")
 int new__system_property_get(const char *__name, char *__value) {
     int result = old__system_property_get(__name, __value);
     if (result < 0) {
@@ -1177,9 +1196,13 @@ void hookProperties(int api_level, void *handle) {
         hook_function(handle, "__system_property_get", (void *) &new__system_property_get,
                       (void **) &old__system_property_get);
     } else {
+        //  https://www.jianshu.com/p/d7e3129bc36d
         // android 9 __system_property_get函数太短，不能使用inline hook，这里暂时使用PLT 替代
         // android 9上面的__system_property_get是一个跳转函数，内部调用 __fastcall SystemProperties::Get(SystemProperties *__hidden this, const char *, char *)。
         // 但是这个函数对应的符号：_ZN16SystemProperties3GetEPKcPc没有导出，也无法通过 dlfcn_nougat获得
+        // 在当前进程的内存空间中，在每一个符合正则表达式 libc_path 的已加载ELF中，每一个调用 symbol 的 PLT 入口点的地址值都将给替换成 new_func。之前的 PLT 入口点的地址值将被保存在 old_func 中。
+        // new_func 必须具有和原函数同样的函数声明。
+        // 成功返回 0，失败返回 非0。
         int register_ret = xhook_register(libc_path, "__system_property_get",
                                           (void *) &new__system_property_get,
                                           (void **) &old__system_property_get);
@@ -1193,7 +1216,7 @@ void hookProperties(int api_level, void *handle) {
     }
 }
 
-
+//执行shell命令并读取结果返回一个文件指针
 FILE *(*origin_popen)(const char *command, const char *type);
 
 #define _LINE_LENGTH 300
@@ -1334,7 +1357,7 @@ void startIOHook(int api_level, bool needHookProperties) {
     }
 }
 
-
+//将 libc 库函数的方法进行 hook, 将输入参数替换为虚拟 app 路径
 void
 IOUniformer::startUniformer(int api_level,
                             int preview_api_level, const char *so_path, const char *so_path_64) {

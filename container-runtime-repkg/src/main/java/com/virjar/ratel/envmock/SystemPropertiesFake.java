@@ -16,8 +16,9 @@ import external.org.apache.commons.lang3.StringUtils;
 public class SystemPropertiesFake {
 
 
+    //伪造系统参数
     public static void fakeSystemProperties() {
-        Map<String, String> systemPropertiesFake = RatelToolKit.fingerPrintModel.systemPropertiesFakeMap;
+        Map<String, String> systemPropertiesFake = RatelToolKit.fingerPrintModel.systemPropertiesFakeMap;//获取伪造的系统参数
         if (systemPropertiesFake == null) {
             return;
         }

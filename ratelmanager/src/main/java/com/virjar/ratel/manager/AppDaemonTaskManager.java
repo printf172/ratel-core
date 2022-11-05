@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import com.virjar.ratel.manager.repo.RatelAppRepo;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+
 
 public class AppDaemonTaskManager {
 

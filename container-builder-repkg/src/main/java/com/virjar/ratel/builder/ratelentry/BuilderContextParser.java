@@ -41,7 +41,7 @@ public class BuilderContextParser {
     private static void resolveOutputFile(BuilderContext builderContext, boolean isXApk) throws IOException {
         //工作目录准备
         File outFile;
-        if (builderContext.cmd.hasOption('D')) {
+         if (builderContext.cmd.hasOption('D')) {
             outFile = File.createTempFile("ratel_decompile_temp", ".apk");
             outFile.deleteOnExit();
         } else if (builderContext.cmd.hasOption('o')) {

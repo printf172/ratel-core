@@ -60,7 +60,7 @@ public interface VirtualEnv {
      * <ul>
      * <li>{@link com.virjar.ratel.api.VirtualEnv.VirtualEnvModel#DISABLE}: 不会有任何作用，调用直接被忽略</li>
      * <li>{@link com.virjar.ratel.api.VirtualEnv.VirtualEnvModel#START_UP} | {@link com.virjar.ratel.api.VirtualEnv.VirtualEnvModel#INSTALL} </li>
-     * <li>{@link com.virjar.ratel.api.VirtualEnv.VirtualEnvModel#MULTI}: 切换到userId对应的账户下，如果userId不存在，那么重新创建。如果userId为控，那么ratel自动创建一个</li>
+     * <li>{@link com.virjar.ratel.api.VirtualEnv.VirtualEnvModel#MULTI}: 切换到userId对应的账户下，如果userId不存在，那么重新创建。如果userId为空，那么ratel自动创建一个</li>
      * </ul>
      * 本API只有在main进程中执行有效，所有环境操作只能由主进程执行<br>
      * 如果设备数据切换成功，那么将会导致app主动停止。需要被其他框架重新守护
@@ -96,7 +96,7 @@ public interface VirtualEnv {
     /**
      * 当前用户生效的用户，仅在MULTI模式下有效在
      *
-     * @return userId, 如果userId在输入的时候存在特殊字符。那么特殊字符将会被清楚
+     * @return userId, 如果userId在输入的时候存在特殊字符。那么特殊字符将会被清除
      */
     String nowUser();
 

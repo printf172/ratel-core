@@ -300,7 +300,10 @@ static void xh_core_hook(xh_core_map_info_t *mi)
         xh_core_sigsegv_flag = 0;
     }
 }
-
+//  利用xhook安卓系统底层抹机原理
+//1、先读取/proc/self/maps文件内容
+//2、正则匹配找到so文件路径和加载基址
+//3、解析elf格式找到要hook的函数的地址替换成自己指定的函数地址
 static void xh_core_refresh_impl()
 {
     char                     line[512];
@@ -318,7 +321,7 @@ static void xh_core_refresh_impl()
     int                      match;
     xh_core_map_info_tree_t  map_info_refreshed = RB_INITIALIZER(&map_info_refreshed);
 
-    if(NULL == (fp = fopen("/proc/self/maps", "r")))
+    if(NULL == (fp = fopen("/proc/self/maps", "r")))//打开一些设备配置文件
     {
         XH_LOG_ERROR("fopen /proc/self/maps failed");
         return;

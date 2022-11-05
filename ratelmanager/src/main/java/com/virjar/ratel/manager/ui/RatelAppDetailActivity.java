@@ -263,6 +263,7 @@ public class RatelAppDetailActivity extends XposedBaseActivity {
             return view;
         }
 
+        //初始化多用户面板
         private void initMultiUserPanel(View fragmentView, RatelApp ratelApp) {
             RecyclerView recyclerView = fragmentView.findViewById(R.id.multi_user_container);
             StaggeredGridLayoutManager staggeredGridLayoutManager =
@@ -394,6 +395,7 @@ public class RatelAppDetailActivity extends XposedBaseActivity {
                 }
             });
 
+            //新增设备监听
             createDeviceBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -433,7 +435,7 @@ public class RatelAppDetailActivity extends XposedBaseActivity {
             });
 
         }
-
+        //新增设备
         private void doAddNewDevices(String newUserId) {
             if (multiUserBundle.getAvailableUserSet().contains(newUserId)) {
                 Toast.makeText(MyAdapter.this.context, "user existed", Toast.LENGTH_SHORT).show();

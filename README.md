@@ -18,7 +18,7 @@
 
 ## debug环境
 ```
-./script/build_ratel_repkg.sh xxx.apk
+./script/build_ratel_repkg.sh ratel_properties_virtualEnvModel=MULTI xxx.apk
 ```
 
 ## 单步调试
@@ -27,5 +27,6 @@
 
 ## RatelManager apk构建(请注意，自2.0版本之后，RM构建需要使用脚本构建，否则无法支持app端进行重打包)：
 ```
-./script/build_ratel_manager.sh
+./script/build_ratel_manager.sh 
+app虚拟模式处在multi模式下下，加入构建参数:ratel_properties_virtualEnvModel=MULTI或者在插件中指定<meta-data android:name="virtualEnvModel" android:value="Multi" />
 ```

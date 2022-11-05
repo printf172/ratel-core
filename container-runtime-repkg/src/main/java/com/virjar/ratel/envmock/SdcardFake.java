@@ -49,6 +49,7 @@ public class SdcardFake {
     }
 
 
+    //伪造文件系统
     static void fakeFileSystem(Context context) throws IOException {
         if (!Environment.MEDIA_MOUNTED.equalsIgnoreCase(Environment.getExternalStorageState())) {
             Log.w(Constants.TAG, "the sdcard not mounted");

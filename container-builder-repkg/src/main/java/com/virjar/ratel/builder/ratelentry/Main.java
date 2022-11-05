@@ -487,6 +487,7 @@ public class Main {
     }
 
     private static void restoreConstants() throws Exception {
+        //读配置文件
         InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(Constants.CONSTANTS_DEFINE_PROPERTIES);
         if (inputStream == null) {
             return;

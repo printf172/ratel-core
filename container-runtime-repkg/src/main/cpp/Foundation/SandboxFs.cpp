@@ -106,6 +106,7 @@ int add_replace_item(const char *orig_path, const char *new_path) {
     setenv(src_env_name, orig_path, 1);
     setenv(dst_env_name, new_path, 1);
 
+    //realloc : 更改已经配置的内存空间，即更改由malloc()函数分配的内存空间的大小。
     replace_items = (ReplaceItem *) realloc(replace_items,
                                             replace_item_count * sizeof(ReplaceItem) +
                                             sizeof(ReplaceItem));
@@ -283,7 +284,7 @@ const char *relocate_path(const char *path, char *const buffer, const size_t siz
 //    }
     return relocate_path(path, buffer, size, true);
 }
-
+//重定向逻辑
 const char *relocate_path(const char *path, char *const buffer, const size_t size, bool notify) {
     // ALOGI("FILE_ACCESS =%s", path);
 //    if (IS_EXECVE_SUB_PROCESS) {

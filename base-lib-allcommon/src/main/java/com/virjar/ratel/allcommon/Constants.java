@@ -151,7 +151,7 @@ public class Constants {
     public static boolean devBuild = true;
 
     /**
-     * ratel 支持的4中一引擎模式，分别为: rebuildDex 、 appendDex 、 shell 、zelda
+     * ratel 支持的4种引擎模式，分别为: rebuildDex 、 appendDex 、 shell 、zelda
      */
     public static final String RATEL_ENGINE_ENUM_REBUILD = "rebuildDex";
     public static final String RATEL_ENGINE_ENUM_APPENDEX = "appendDex";
