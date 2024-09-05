@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 import com.virjar.ratel.allcommon.Constants
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         multiDexEnabled true
         applicationId Constants.RATEL_MANAGER_PACKAGE
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 31
         versionCode 20
         versionName "2.0-SNAPSHOT"
         archivesBaseName = "RatelManager_${versionName}".replace(' ', '_')

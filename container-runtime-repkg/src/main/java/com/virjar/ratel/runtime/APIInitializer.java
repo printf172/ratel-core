@@ -1,5 +1,6 @@
 package com.virjar.ratel.runtime;
 
+import android.content.Intent;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.util.Log;
@@ -67,6 +68,7 @@ class APIInitializer {
                 // /storage/usba/    这个在root下面
                 // /storage/sdcard1/ 这个在root下面
                 //不是所有都有权限
+
                 File sdcardRoot = new File(base);
                 if (!sdcardRoot.canRead()) {
                     Log.i(Constants.TAG, "can not read sdcard root: " + sdcardRoot);
@@ -95,7 +97,7 @@ class APIInitializer {
                 }
             }
             //这也是一个白名单，用来和ratelManager交换数据
-            //TODO ratelManager也需要适配安卓10和11的分区存储
+            //TODO ratelManager也需要适配安卓10和11的分区存
             RatelNative.whitelist(new File(directory, Constants.ratelSDCardRoot).getAbsolutePath());
         }
 
@@ -147,6 +149,8 @@ class APIInitializer {
         ClientHandlerServiceConnection.addOnManagerIPCListener(new RatelPhoneIdFetcher());
 
     }
+
+
 
     private static class RatelPhoneIdFetcher implements ClientHandlerServiceConnection.OnManagerReadyListener {
 

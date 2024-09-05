@@ -121,6 +121,7 @@ public class RatelMultiDexApplication extends Application {
         }
     }
 
+
     @Override
     public void unregisterActivityLifecycleCallbacks(ActivityLifecycleCallbacks callback) {
         super.unregisterActivityLifecycleCallbacks(callback);

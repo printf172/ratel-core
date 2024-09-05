@@ -34,7 +34,7 @@ public class MultiUserManager {
         RatelConfig.setConfig(Constants.multiUserIdKey, mockUserId);
     }
 
-
+    //新增用户
     public static String addUserIfNotExist(String mockUserId) {
         String trimMockUserId = VirtualEnv.defaultMultiUserId;
         if (!TextUtils.isEmpty(mockUserId)) {

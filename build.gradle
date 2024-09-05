@@ -6,17 +6,17 @@ buildscript {
             flatDir {
                 dir rootProject.file('base-lib-allcommon-lib')
             }
-            maven {
-                name "aliyunCentral"
-                url "https://maven.aliyun.com/repository/central"
-            }
-            maven {
-                name "aliyunGoogle"
-                url "https://maven.aliyun.com/repository/google"
-            }
-            maven {
-                name "aliyunJCenter"
-                url "https://maven.aliyun.com/repository/jcenter"
+            google()
+            jcenter()
+            maven { url 'https://jitpack.io' }
+            mavenCentral()
+            maven { url 'https://maven.aliyun.com/repository/jcenter' }
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            mavenLocal()
+            maven { url 'https://dl.bintray.com/umsdk/release' }
+            maven { url 'https://maven.google.com/'}
+            maven{
+                url 'https://maven.aliyun.com/repository/public/'
             }
         }
     }
@@ -34,22 +34,17 @@ allprojects {
             flatDir {
                 dir rootProject.file('base-lib-allcommon-lib')
             }
-            maven {
-                name "aliyunCentral"
-                url "https://maven.aliyun.com/repository/central"
-            }
-            maven {
-                name "aliyunGoogle"
-                url "https://maven.aliyun.com/repository/google"
-            }
-
-            maven {
-                name "aliyunJCenter"
-                url "https://maven.aliyun.com/repository/jcenter"
-            }
-            maven {
-                name "contralSnapshot"
-                url "https://oss.sonatype.org/content/repositories/snapshots/"
+            google()
+            jcenter()
+            maven { url 'https://jitpack.io' }
+            mavenCentral()
+            maven { url 'https://maven.aliyun.com/repository/jcenter' }
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            mavenLocal()
+            maven { url 'https://dl.bintray.com/umsdk/release' }
+            maven { url 'https://maven.google.com/'}
+            maven{
+                url 'https://maven.aliyun.com/repository/public/'
             }
         }
     }

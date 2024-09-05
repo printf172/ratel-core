@@ -321,7 +321,7 @@ public class EnvMockController {
 
         // 11
         //拦截contentProvider
-        ContentProviderFake.fakeContentProvider();
+        ContentProviderFake.adbfakeContentProvider();
 
         // 12
         //不同版本的序列号策略不一致，单独抽取一个类来实现

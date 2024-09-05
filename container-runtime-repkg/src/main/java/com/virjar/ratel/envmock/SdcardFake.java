@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class SdcardFake {
+public class  SdcardFake {
 
     private static String[] getAllPoints(Context context) {
         StorageManager manager = (StorageManager)

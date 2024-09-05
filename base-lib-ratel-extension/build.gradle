@@ -49,15 +49,18 @@ compileTestJava {
     targetCompatibility = JDK_VERSION
     [compileTestJava]*.options*.encoding = 'UTF-8'
 }
+// 生成源码 jar
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allJava
 }
+
 // 生成 javadoc jar
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
+
 // javadoc 配置，这里是自定义了 java doc 的一些配置
 javadoc {
     description = "Generates project-level javadoc for use in -javadoc jar"

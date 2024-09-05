@@ -563,6 +563,7 @@ public class RatelAppDetailActivity extends XposedBaseActivity {
                                     Log.w(RatelManagerApp.TAG, "unknown menu item");
                             }
 
+
                             return true;
                         }
                     });

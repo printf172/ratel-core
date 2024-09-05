@@ -148,7 +148,7 @@ public class ContentProviderFake {
     }
 
 
-    public static void fakeContentProvider() {
+    public static void  adbfakeContentProvider() {
         fakeInstalledContentProvider();
         IPCHook();
 

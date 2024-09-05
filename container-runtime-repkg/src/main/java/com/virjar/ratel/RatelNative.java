@@ -128,6 +128,7 @@ public class RatelNative {
         }
     }
 
+    //IO重定向
     public static void enableIORedirect() {
 
         if (sEnabled && !hasNewConfig) {

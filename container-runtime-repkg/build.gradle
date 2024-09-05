@@ -32,13 +32,13 @@ fileOutputStream.close()
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
 
     defaultConfig {
         applicationId "com.virjar.ratel.core.runtime"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode rootProject.ext.ratelEngineVersionCode
         versionName rootProject.ext.ratelEngineVersion
         // buildConfigField '', 'RatelRuntimeBuildTimestamp', String.valueOf(System.currentTimeMillis())

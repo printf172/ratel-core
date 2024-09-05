@@ -49,9 +49,9 @@ public class DemoAppHooker implements IRposedHookLoadPackage {
 //        RatelToolKit.sContext.createPackageContext()
 
 //
-//        RatelToolKit.ratelUnpack.enableUnPack(
-//                new File(RatelToolKit.sContext.getFilesDir(), "dex_dump"), false
-//        ); Size must be positive
+        RatelToolKit.ratelUnpack.enableUnPack(
+                new File(RatelToolKit.sContext.getFilesDir(), "dex_dump"), false
+        ); //Size must be positive
 
 //        Class<?> dexFileClass = RposedHelpers.findClass("dalvik.system.DexFile", ClassLoader.getSystemClassLoader());
 //        if (dexFileClass == null) {
